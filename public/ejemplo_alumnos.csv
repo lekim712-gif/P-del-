@@ -1,0 +1,12 @@
+nombre,apellidos,fechaNacimiento,telefono,email,nivel,tutorNombre,tutorTelefono,tutorEmail,consentimiento
+Beatriz,Calvo Herrero,14/02/1991,611 222 301,beatriz.calvo@ejemplo.com,iniciación,,,,
+Tomás,Aguirre Salas,03/09/1985,611 222 302,tomas.aguirre@ejemplo.com,intermedio,,,,
+Nerea,Pascual Lara,21/06/1996,611 222 303,nerea.pascual@ejemplo.com,avanzado,,,,
+Raúl,Benítez Cardona,14/03/1988,612 345 678,raul.benitez@ejemplo.com,intermedio,,,,
+Beatriz,Calvo Herrero,14/02/1991,611 222 301,beatriz.calvo@ejemplo.com,iniciación,,,,
+Martín,Soto Ibarra,12/05/2016,,,iniciación,Elisa Ibarra Gil,611 222 310,elisa.ibarra@ejemplo.com,sí
+Lola,Soto Ibarra,30/11/2018,,,iniciación,Elisa Ibarra Gil,611 222 310,elisa.ibarra@ejemplo.com,sí
+Gael,Rivas Montero,09/01/2017,,,iniciación,,,,
+Irene,Vidal Cano,31/02/1990,611 222 305,irene.vidal@ejemplo.com,intermedio,,,,
+Hugo,Lozano Peña,17/07/1993,611 222 306,hugo.lozano-arroba,avanzado,,,,
+Sofía,Marín Duran,05/04/1999,611 222 307,sofia.marin@ejemplo.com,experto,,,,

@@ -175,3 +175,13 @@ describe('Regla 9 · menores', () => {
 describe('Utilidades', () => {
   it('formato dd/mm/aaaa', () => expect(formatoFecha('2026-10-09')).toBe('09/10/2026'));
 });
+
+describe('Utilidades de fecha', () => {
+  it('rechaza fechas que no existen', async () => {
+    const { fechaValida } = await import('@/lib/rules');
+    expect(fechaValida('2024-02-29')).toBe(true);
+    expect(fechaValida('1990-02-31')).toBe(false);
+    expect(fechaValida('2026-13-01')).toBe(false);
+    expect(fechaValida('hola')).toBe(false);
+  });
+});

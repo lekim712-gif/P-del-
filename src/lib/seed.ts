@@ -174,6 +174,8 @@ export function seedDatabase(d: DatabaseSync, hoy: Date) {
     const n = nombreUnico(rnd() < 0.5);
     adultos.push(crearAlumno({ ...n, edad: 20 + Math.floor(rnd() * 40), nivel: adNiveles[i], estado: 'activo' }, 'adultos'));
   }
+  // Alumno con datos fijos para que el CSV de ejemplo (ejemplo_alumnos.csv) detecte un duplicado real.
+  d.prepare("UPDATE alumno SET nombre='Raúl', apellidos='Benítez Cardona', fechaNacimiento='1988-03-14', telefono='612 345 678', email='raul.benitez@ejemplo.com' WHERE id=?").run(adultos[7].id);
   const esperaNiv = ['iniciacion', 'iniciacion', 'intermedio', 'competicion', 'competicion'];
   const adultosEspera = esperaNiv.map((nivel) => {
     const n = nombreUnico(rnd() < 0.5);
@@ -388,9 +390,13 @@ export function seedDatabase(d: DatabaseSync, hoy: Date) {
   for (const [k, cancel] of [[0, cancel1], [1, cancel2]] as const) {
     if (!cancel) continue;
     const insc = porGrupo.get(grupoIds[cancel.gi]) ?? [];
-    insc.slice(0, 3).forEach((i) => {
+    const familiasAvisadas = new Set<string>();
+    insc.slice(0, 4).forEach((i) => {
       const al = alMap.get(i.alumnoId)!; const dst = destinatario(al);
-      msg('lluvia', al, renderPlantilla(tpl.lluvia, { destinatario: dst.nombre, grupo: GRUPOS[cancel.gi].nivel, fecha: formatoFecha(cancel.fecha), hora: GRUPOS[cancel.gi].hora, escuela: ESCUELA }), 'enviadoSimulado', `${cancel.fecha}T${k ? '08:10' : '09:05'}`);
+      if (familiasAvisadas.has(`${dst.tipo}${dst.id}`)) return; // una familia con dos hijos recibe un solo aviso
+      familiasAvisadas.add(`${dst.tipo}${dst.id}`);
+      const nombreGrupo = q<{ nombre: string }>('SELECT nombre FROM grupo WHERE id=?', grupoIds[cancel.gi])[0].nombre;
+      msg('lluvia', al, renderPlantilla(tpl.lluvia, { destinatario: dst.nombre, grupo: nombreGrupo, fecha: formatoFecha(cancel.fecha), hora: GRUPOS[cancel.gi].hora, escuela: ESCUELA }), 'enviadoSimulado', `${cancel.fecha}T${k ? '08:10' : '09:05'}`);
     });
   }
   cuotasActuales.slice(5, 8).forEach((c) => {

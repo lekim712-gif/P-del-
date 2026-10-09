@@ -43,8 +43,14 @@ export function run(sql: string, ...params: Param[]): { id: number; changes: num
 }
 
 export function tx<T>(fn: () => T): T {
+  const g = globalThis as Global & { __padelTxDepth?: number };
   const d = db();
+  if ((g.__padelTxDepth ?? 0) > 0) {
+    // Transacción anidada: participa de la externa.
+    return fn();
+  }
   d.exec('BEGIN');
+  g.__padelTxDepth = 1;
   try {
     const r = fn();
     d.exec('COMMIT');
@@ -52,6 +58,8 @@ export function tx<T>(fn: () => T): T {
   } catch (e) {
     d.exec('ROLLBACK');
     throw e;
+  } finally {
+    g.__padelTxDepth = 0;
   }
 }
 

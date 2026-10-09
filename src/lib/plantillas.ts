@@ -5,9 +5,9 @@ export const PLANTILLAS_DEFECTO = [
   { clave: 'aviso1', nombre: 'Aviso de impago (1.º)', texto: 'Hola {destinatario}, la cuota de {mes} de {alumno} ({importe}) venció el {vencimiento} y seguimos sin verla. Si ya la has pagado, ignora este mensaje. — {escuela}' },
   { clave: 'aviso2', nombre: 'Aviso de impago (2.º)', texto: 'Hola {destinatario}, segundo aviso: la cuota de {mes} de {alumno} ({importe}) sigue pendiente desde el {vencimiento}. Escríbenos si necesitas ayuda para regularizarlo. — {escuela}' },
   { clave: 'coordinador', nombre: 'Aviso al coordinador (impago grave)', texto: 'Aviso interno: la cuota de {mes} de {alumno} ({importe}) lleva más de 20 días vencida (venció el {vencimiento}). Conviene llamar a la familia.' },
-  { clave: 'lluvia', nombre: 'Clase cancelada por lluvia', texto: 'Hola {destinatario}, la clase de {grupo} del {fecha} ({hora}) se cancela por lluvia. Tienes una recuperación disponible, sin límite mensual, durante 30 días. — {escuela}' },
-  { clave: 'horario', nombre: 'Cambio de horario', texto: 'Hola {destinatario}, te avisamos de un cambio de horario en {grupo}: la clase del {fecha} pasa a las {hora}. Disculpa las molestias. — {escuela}' },
-  { clave: 'recuperacion', nombre: 'Confirmación de recuperación', texto: 'Hola {destinatario}, confirmada la recuperación de {alumno} en {grupo} el {fecha} a las {hora}. ¡Te esperamos! — {escuela}' },
+  { clave: 'lluvia', nombre: 'Clase cancelada por lluvia', texto: 'Hola {destinatario}, la clase del {fecha} del grupo «{grupo}» se cancela por lluvia. Tienes una recuperación disponible, sin límite mensual, durante 30 días. — {escuela}' },
+  { clave: 'horario', nombre: 'Cambio de horario', texto: 'Hola {destinatario}, te avisamos de un cambio de horario en «{grupo}»: la clase del {fecha} pasa a las {hora}. Disculpa las molestias. — {escuela}' },
+  { clave: 'recuperacion', nombre: 'Confirmación de recuperación', texto: 'Hola {destinatario}, confirmada la recuperación de {alumno} en «{grupo}» el {fecha}. ¡Te esperamos! — {escuela}' },
 ] as const;
 
 export function renderPlantilla(texto: string, vars: Record<string, string | number | undefined>): string {

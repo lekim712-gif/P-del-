@@ -36,6 +36,13 @@ export function fechaHora(fecha: string, hora = '00:00'): Date {
   return new Date(y, m - 1, d, hh, mm, 0, 0);
 }
 
+/** Comprueba que 'aaaa-mm-dd' existe en el calendario (rechaza 31/02, 30/02…). */
+export function fechaValida(fecha: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) return false;
+  const d = fechaHora(fecha);
+  return !isNaN(d.getTime()) && aISO(d) === fecha;
+}
+
 export function aISO(d: Date): string {
   const p = (n: number) => String(n).padStart(2, '0');
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
