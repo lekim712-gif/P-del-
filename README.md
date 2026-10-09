@@ -14,6 +14,8 @@ npm run dev        # http://localhost:3000
 npm test           # reglas de negocio
 ```
 
+**Probar desde el móvil:** con el móvil en la misma wifi, ejecuta `npm run dev:lan` y abre `http://IP-DE-TU-ORDENADOR:3000` (ej. `http://192.168.1.34:3000`). La IP la ves con `ipconfig` (Windows) o `ifconfig`/`ip a` (Mac/Linux).
+
 `npm run db:reset` se puede ejecutar con el servidor en marcha: vacía las tablas sin borrar el archivo.
 Los datos se generan relativos a la fecha de hoy (hay siempre clases hoy, 8 semanas de historial y 4 semanas por delante).
 
