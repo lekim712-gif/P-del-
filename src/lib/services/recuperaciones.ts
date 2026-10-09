@@ -1,6 +1,7 @@
 import { all, one, run, tx, ahora, hoyISO, getConfig } from '../db';
-import { diasEntre, formatoFecha, haCaducado, mesDe, validarReservaRecuperacion } from '../rules';
+import { diasEntre, encajaDisponibilidad, formatoFecha, haCaducado, mesDe, validarReservaRecuperacion } from '../rules';
 import { crearMensaje, fail, ok, type Result } from './common';
+import { getDisponibilidad } from './disponibilidad';
 
 export type RecuperacionRow = {
   id: number; alumnoId: number; alumno: string; sesionOrigenId: number; sesionDestinoId: number | null; estado: string; caducaEn: string;
@@ -38,7 +39,7 @@ function usadasEnMes(alumnoId: number, mes: string, excluirId?: number) {
 
 export type SesionCompatible = {
   sesionId: number; fecha: string; horaInicio: string; grupo: string; pista: string; profesor: string; plazasLibres: number;
-  valida: boolean; motivo?: string;
+  valida: boolean; motivo?: string; encaja: boolean;
 };
 
 export function sesionesCompatibles(recuperacionId: number): SesionCompatible[] {
@@ -47,6 +48,7 @@ export function sesionesCompatibles(recuperacionId: number): SesionCompatible[] 
   if (!r) return [];
   const ahoraD = ahora();
   const cfg = getConfig();
+  const disp = getDisponibilidad(r.alumnoId);
   const cand = all<{ id: number; fecha: string; estado: string; horaInicio: string; nivel: string; grupo: string; pista: string; profesor: string; plazasMax: number; inscritos: number; reservas: number; yaInscrito: number }>(
     `SELECT s.id, s.fecha, s.estado, g.horaInicio, g.nivel, g.nombre AS grupo, pi.nombre AS pista, p.nombre AS profesor, g.plazasMax,
        (SELECT COUNT(*) FROM inscripcion i WHERE i.grupoId = g.id AND i.fechaAlta <= s.fecha AND (i.fechaBaja IS NULL OR i.fechaBaja > s.fecha)) AS inscritos,
@@ -60,8 +62,8 @@ export function sesionesCompatibles(recuperacionId: number): SesionCompatible[] 
       recuperacion: r, nivelOrigen: r.nivel, destino: { fecha: c.fecha, horaInicio: c.horaInicio, nivel: c.nivel, plazasLibres: libres, estado: c.estado },
       usadasEnMes: usadasEnMes(r.alumnoId, mesDe(c.fecha)), ahora: ahoraD, cfg,
     });
-    return { sesionId: c.id, fecha: c.fecha, horaInicio: c.horaInicio, grupo: c.grupo, pista: c.pista, profesor: c.profesor, plazasLibres: libres, valida: v.ok, motivo: v.ok ? undefined : v.motivo };
-  });
+    return { sesionId: c.id, fecha: c.fecha, horaInicio: c.horaInicio, grupo: c.grupo, pista: c.pista, profesor: c.profesor, plazasLibres: libres, valida: v.ok, motivo: v.ok ? undefined : v.motivo, encaja: encajaDisponibilidad(new Date(c.fecha + 'T12:00').getDay(), c.horaInicio, disp) };
+  }).sort((a, b) => Number(b.valida) - Number(a.valida) || Number(b.encaja) - Number(a.encaja));
 }
 
 export function reservarRecuperacion(recuperacionId: number, sesionId: number): Result {

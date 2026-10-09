@@ -47,3 +47,12 @@ CREATE TABLE mensaje (
 );
 CREATE TABLE plantilla (clave TEXT PRIMARY KEY, nombre TEXT NOT NULL, texto TEXT NOT NULL);
 CREATE TABLE configuracion (clave TEXT PRIMARY KEY, valor TEXT NOT NULL);
+
+CREATE TABLE disponibilidad (
+  alumnoId INTEGER NOT NULL REFERENCES alumno(id), diaSemana INTEGER NOT NULL, franja TEXT NOT NULL CHECK (franja IN ('manana','tarde','noche')),
+  PRIMARY KEY (alumnoId, diaSemana, franja)
+);
+CREATE TABLE solicitud (
+  id INTEGER PRIMARY KEY, alumnoId INTEGER NOT NULL REFERENCES alumno(id), grupoId INTEGER NOT NULL REFERENCES grupo(id),
+  estado TEXT NOT NULL CHECK (estado IN ('pendiente','confirmada','espera','rechazada')), creadoEn TEXT NOT NULL
+);

@@ -9,6 +9,7 @@ import * as sesiones from '@/lib/services/sesiones';
 import * as recup from '@/lib/services/recuperaciones';
 import * as cuotas from '@/lib/services/cuotas';
 import * as mensajes from '@/lib/services/mensajes';
+import * as disp from '@/lib/services/disponibilidad';
 import { guardarConfig } from '@/lib/services/config';
 
 function refrescar<T extends Result<any>>(r: T): T {
@@ -62,3 +63,22 @@ export async function masivoAction(args: Parameters<typeof mensajes.envioMasivo>
 
 // Configuración
 export async function configAction(valores: Record<string, string>) { return refrescar(guardarConfig(valores)); }
+
+// Cuenta y panel del alumno
+export async function disponibilidadAction(alumnoId: number, celdas: { diaSemana: number; franja: string }[]) { return refrescar(disp.guardarDisponibilidad(alumnoId, celdas)); }
+export async function solicitarAction(alumnoId: number, grupoId: number) { return refrescar(disp.solicitarGrupo(alumnoId, grupoId)); }
+export async function cancelarSolicitudAction(id: number) { return refrescar(disp.cancelarSolicitud(id)); }
+export async function resolverSolicitudAction(id: number, aceptar: boolean) { return refrescar(disp.resolverSolicitud(id, aceptar)); }
+export async function crearCuentaAction(d: { nombre: string; apellidos: string; fechaNacimiento: string; nivel: string; email?: string; telefono?: string }): Promise<Result<{ id: number }>> {
+  if (!d.email?.trim()) return { ok: false, msg: 'El email es obligatorio para crear la cuenta.' };
+  const edad = (await import('@/lib/rules')).calcularEdad(d.fechaNacimiento, new Date());
+  if (edad < 14) return { ok: false, msg: 'Los menores de 14 años acceden desde la cuenta de su familia (rol Familia).' };
+  const r = alumnos.guardarAlumno(d);
+  if (r.ok) {
+    const c = await cookies();
+    c.set('rol', 'alumno', { path: '/' });
+    c.set('actor', String(r.data!.id), { path: '/' });
+    revalidatePath('/', 'layout');
+  }
+  return (r.ok ? { ...r, msg: 'Cuenta creada. Indica cuándo puedes ir para ver los grupos de tu nivel.' } : r) as Result<{ id: number }>;
+}

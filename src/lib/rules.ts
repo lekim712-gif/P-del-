@@ -252,3 +252,24 @@ export const DIAS_SEMANA = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves'
 export function nombreDia(n: number): string {
   return DIAS_SEMANA[n] ?? '';
 }
+
+// ---------------------------------------------------------------- Disponibilidad del alumno
+export const FRANJAS = [
+  { id: 'manana', nombre: 'Mañana', rango: 'hasta las 13:00', desde: 0, hasta: 13 * 60 },
+  { id: 'tarde', nombre: 'Tarde', rango: '13:00–19:00', desde: 13 * 60, hasta: 19 * 60 },
+  { id: 'noche', nombre: 'Noche', rango: 'desde las 19:00', desde: 19 * 60, hasta: 24 * 60 },
+] as const;
+
+export function franjaDeHora(hhmm: string): 'manana' | 'tarde' | 'noche' {
+  const [h, m] = hhmm.split(':').map(Number);
+  const min = h * 60 + m;
+  return (FRANJAS.find((f) => min >= f.desde && min < f.hasta) ?? FRANJAS[2]).id;
+}
+
+export type Disponibilidad = { diaSemana: number; franja: string };
+
+/** Un grupo encaja si su día y la franja de su hora de inicio están marcados como disponibles. */
+export function encajaDisponibilidad(diaSemana: number, horaInicio: string, disp: Disponibilidad[]): boolean {
+  const f = franjaDeHora(horaInicio);
+  return disp.some((d) => d.diaSemana === diaSemana && d.franja === f);
+}

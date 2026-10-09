@@ -24,7 +24,7 @@ export function Reservar({ recuperacionId, compacto }: { recuperacionId: number;
         <ul className="grid max-h-72 gap-1.5 overflow-y-auto">
           {ops.map((o) => (
             <li key={o.sesionId} className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-white px-3 py-2 text-sm">
-              <span><b className="tabular-nums">{formatoFecha(o.fecha)} {o.horaInicio}</b> · {o.grupo}<span className="block text-xs text-ink-500">{o.pista} · {o.profesor} · {o.plazasLibres} plaza{o.plazasLibres === 1 ? '' : 's'} libre{o.plazasLibres === 1 ? '' : 's'}</span></span>
+              <span><b className="tabular-nums">{formatoFecha(o.fecha)} {o.horaInicio}</b> · {o.grupo}<span className="block text-xs text-ink-500">{o.pista} · {o.profesor} · {o.plazasLibres} plaza{o.plazasLibres === 1 ? '' : 's'} libre{o.plazasLibres === 1 ? '' : 's'}{o.encaja && <b className="ml-2 text-brand-700">✓ encaja con tu disponibilidad</b>}</span></span>
               {o.valida
                 ? <button className="btn-primary btn-sm" disabled={pending} onClick={() => run(() => reservarAction(recuperacionId, o.sesionId), { onOk: () => setAbierto(false) })}>Reservar aquí</button>
                 : <span className="max-w-[220px] text-right text-xs font-semibold text-red-700">{o.motivo}</span>}

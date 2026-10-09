@@ -22,6 +22,14 @@ Los datos se generan relativos a la fecha de hoy (hay siempre clases hoy, 8 sema
 ## Roles
 Selector arriba a la derecha (sin autenticación real): Director, Recepción, Profesor (elige profesor) y Familia (elige familia). Cada rol ve su menú.
 
+## Cuenta y panel del alumno
+- **Crear cuenta de alumno** (enlace en la cabecera): registro con nombre, nivel y email. La cuenta es simulada: no hay contraseña real ni inicio de sesión; se entra con el rol **Alumno**. Los menores de 14 años acceden desde el rol Familia.
+- **No voy:** el alumno avisa de que no asistirá a una clase; se aplica la regla de las horas de aviso y se le dice si genera recuperación.
+- **Cuándo puedo ir:** marca día y franja (mañana, tarde, noche). El sistema propone los grupos de **su nivel** que encajan y tienen plaza (los demás del nivel quedan en un desplegable).
+- **Solicitar plaza:** el alumno pide un grupo y recepción lo confirma o rechaza en **Solicitudes**. Al confirmar se aplican las reglas de plazas (si está completo, pasa a lista de espera) y de menores.
+- Al reservar una recuperación, las sesiones que encajan con su disponibilidad salen primero y marcadas.
+- El nivel lo declara el alumno al registrarse y lo revisa recepción.
+
 ## Guion de 5 minutos
 1. **Director** → Panel: impagos y grupos con lista de espera.
 2. Alumnos → Importar CSV con `ejemplo_alumnos.csv` (1 duplicado en la base, 1 repetido, 4 errores).

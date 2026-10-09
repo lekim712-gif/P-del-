@@ -185,3 +185,22 @@ describe('Utilidades de fecha', () => {
     expect(fechaValida('hola')).toBe(false);
   });
 });
+
+describe('Disponibilidad del alumno', () => {
+  it('asigna franja por hora de inicio', async () => {
+    const { franjaDeHora } = await import('@/lib/rules');
+    expect(franjaDeHora('09:00')).toBe('manana');
+    expect(franjaDeHora('17:30')).toBe('tarde');
+    expect(franjaDeHora('19:00')).toBe('noche');
+    expect(franjaDeHora('21:30')).toBe('noche');
+  });
+  it('un grupo encaja solo si día y franja coinciden', async () => {
+    const { encajaDisponibilidad } = await import('@/lib/rules');
+    const disp = [{ diaSemana: 1, franja: 'noche' }, { diaSemana: 6, franja: 'manana' }];
+    expect(encajaDisponibilidad(1, '19:00', disp)).toBe(true);
+    expect(encajaDisponibilidad(1, '10:00', disp)).toBe(false);
+    expect(encajaDisponibilidad(2, '19:00', disp)).toBe(false);
+    expect(encajaDisponibilidad(6, '10:30', disp)).toBe(true);
+    expect(encajaDisponibilidad(1, '19:00', [])).toBe(false);
+  });
+});

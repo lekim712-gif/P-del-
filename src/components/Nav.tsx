@@ -3,11 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { LayoutDashboard, Users, Layers, Calendar, SquareCheck, RefreshCw, Euro, GraduationCap, MessageSquare, House, Settings } from 'lucide-react';
+import { LayoutDashboard, Users, Layers, Calendar, SquareCheck, RefreshCw, Euro, GraduationCap, MessageSquare, House, Settings, Inbox } from 'lucide-react';
 
-const ICONOS = { 'layout-dashboard': LayoutDashboard, users: Users, layers: Layers, calendar: Calendar, 'check-square': SquareCheck, refresh: RefreshCw, euro: Euro, graduation: GraduationCap, message: MessageSquare, home: House, settings: Settings } as const;
+const ICONOS = { 'layout-dashboard': LayoutDashboard, users: Users, layers: Layers, calendar: Calendar, 'check-square': SquareCheck, refresh: RefreshCw, euro: Euro, graduation: GraduationCap, message: MessageSquare, home: House, settings: Settings, inbox: Inbox } as const;
 
-export function Nav({ items, pendientes }: { items: { href: string; label: string; icono: string }[]; pendientes: number }) {
+export function Nav({ items, pendientes, solicitudes = 0 }: { items: { href: string; label: string; icono: string }[]; pendientes: number; solicitudes?: number }) {
   const path = usePathname();
   const activo = (h: string) => (h === '/' ? path === '/' : path.startsWith(h));
   return (
@@ -19,6 +19,7 @@ export function Nav({ items, pendientes }: { items: { href: string; label: strin
             className={clsx('flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition lg:py-2.5', activo(i.href) ? 'bg-brand-700 text-white' : 'text-ink-700 hover:bg-brand-50')}>
             <Icono size={18} aria-hidden />
             <span>{i.label}</span>
+            {i.href === '/solicitudes' && solicitudes > 0 && <span className="ml-auto rounded-full bg-accent-400 px-1.5 text-[11px] font-bold text-ink-900">{solicitudes}</span>}
             {i.href === '/mensajes' && pendientes > 0 && <span className="ml-auto rounded-full bg-accent-400 px-1.5 text-[11px] font-bold text-ink-900">{pendientes}</span>}
           </Link>
         );

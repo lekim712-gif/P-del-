@@ -404,6 +404,16 @@ export function seedDatabase(d: DatabaseSync, hoy: Date) {
     msg('recordatorio', al, renderPlantilla(tpl.recordatorio, { destinatario: dst.nombre, alumno: nombreAl(c.alumnoId), mes: mesAct, importe: formatoEuro(c.importe), vencimiento: formatoFecha(fechaVencimientoCuota(mesAct)), escuela: ESCUELA }), 'enviadoSimulado', `${sumarDias(fechaVencimientoCuota(mesAct), -3)}T09:00`);
   });
 
+  // Disponibilidad y solicitudes de ejemplo (panel del alumno)
+  const dispEj: [Al, [number, string][]][] = [
+    [adultosEspera[0], [[3, 'manana'], [3, 'tarde'], [1, 'noche']]],
+    [adultosEspera[2], [[4, 'noche'], [2, 'noche'], [6, 'manana']]],
+    [adultos[0], [[1, 'noche'], [4, 'noche']]],
+  ];
+  for (const [al, celdas] of dispEj) for (const [dia, fr] of celdas) ins('disponibilidad', { alumnoId: al.id, diaSemana: dia, franja: fr });
+  ins('solicitud', { alumnoId: adultosEspera[0].id, grupoId: grupoIds[3], estado: 'pendiente', creadoEn: diasAtras(1) });
+  ins('solicitud', { alumnoId: adultosEspera[2].id, grupoId: grupoIds[4], estado: 'pendiente', creadoEn: hoyS });
+
   d.exec('COMMIT');
 
   const n = (t: string, w = '') => Number(q<{ n: number }>(`SELECT COUNT(*) n FROM ${t} ${w}`)[0].n);

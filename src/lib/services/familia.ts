@@ -31,3 +31,10 @@ export function getFamilia(tutorId: number) {
 }
 
 export const _f = fechaHora;
+
+export function proximasSesionesAlumno(alumnoId: number) {
+  return all<{ sesionId: number; fecha: string; estado: string; grupo: string; horaInicio: string; asistencia: string | null }>(
+    `SELECT s.id AS sesionId, s.fecha, s.estado, g.nombre AS grupo, g.horaInicio, a.estado AS asistencia FROM sesion s JOIN grupo g ON g.id=s.grupoId
+     JOIN inscripcion i ON i.grupoId=g.id AND i.alumnoId=? AND i.fechaBaja IS NULL
+     LEFT JOIN asistencia a ON a.sesionId=s.id AND a.alumnoId=? WHERE s.fecha >= ? AND s.estado <> 'impartida' ORDER BY s.fecha, g.horaInicio LIMIT 8`, alumnoId, alumnoId, hoyISO());
+}

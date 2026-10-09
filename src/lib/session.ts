@@ -13,6 +13,9 @@ export async function getSesion() {
   if (rol === 'profesor') {
     const ids = all<{ id: number }>('SELECT id FROM profesor ORDER BY id').map((r) => r.id);
     if (!ids.includes(actorId)) actorId = ids[0];
+  } else if (rol === 'alumno') {
+    const ids = all<{ id: number }>('SELECT id FROM alumno WHERE tutorId IS NULL AND estado <> \'baja\' ORDER BY id').map((r) => r.id);
+    if (!ids.includes(actorId)) actorId = ids[0];
   } else if (rol === 'familia') {
     const ids = all<{ id: number }>('SELECT id FROM tutor ORDER BY id').map((r) => r.id);
     if (!ids.includes(actorId)) actorId = ids[0];
@@ -31,12 +34,14 @@ export const NAV: { href: string; label: string; icono: string; roles: Rol[] }[]
   { href: '/', label: 'Panel', icono: 'layout-dashboard', roles: ['director'] },
   { href: '/alumnos', label: 'Alumnos', icono: 'users', roles: ['director', 'recepcion'] },
   { href: '/grupos', label: 'Grupos', icono: 'layers', roles: ['director', 'recepcion'] },
+  { href: '/solicitudes', label: 'Solicitudes', icono: 'inbox', roles: ['director', 'recepcion'] },
   { href: '/calendario', label: 'Calendario', icono: 'calendar', roles: ['director', 'recepcion', 'profesor'] },
   { href: '/asistencia', label: 'Asistencia', icono: 'check-square', roles: ['director', 'recepcion', 'profesor'] },
   { href: '/recuperaciones', label: 'Recuperaciones', icono: 'refresh', roles: ['director', 'recepcion'] },
   { href: '/cuotas', label: 'Cuotas', icono: 'euro', roles: ['director', 'recepcion'] },
   { href: '/profesores', label: 'Profesores', icono: 'graduation', roles: ['director'] },
   { href: '/mensajes', label: 'Mensajes', icono: 'message', roles: ['director', 'recepcion'] },
+  { href: '/alumno', label: 'Mi panel', icono: 'home', roles: ['alumno'] },
   { href: '/familia', label: 'Mi familia', icono: 'home', roles: ['familia'] },
   { href: '/configuracion', label: 'Configuración', icono: 'settings', roles: ['director'] },
 ];
