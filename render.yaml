@@ -1,0 +1,11 @@
+# Despliegue en Render (https://render.com): "New > Blueprint" y elegir este repositorio.
+services:
+  - type: web
+    name: escuela-padel-demo
+    runtime: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm run start:demo
+    envVars:
+      - key: NODE_VERSION
+        value: 22.13.0

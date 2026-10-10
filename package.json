@@ -9,10 +9,11 @@
     "dev": "next dev",
     "dev:lan": "next dev -H 0.0.0.0",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0",
     "db:reset": "tsx scripts/seed.ts",
     "test": "vitest run",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "start:demo": "npm run db:reset && next start -H 0.0.0.0"
   },
   "dependencies": {
     "clsx": "^2.1.1",

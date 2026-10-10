@@ -3,6 +3,12 @@
 Demo funcional con datos ficticios para enseñar a un club cuya escuela hoy funciona con papel y Excel.
 Gestiona alumnos, grupos estables, asistencia, recuperaciones, cuotas, profesores y comunicación. **No** incluye reservas de pistas, partidos ni torneos (eso ya lo cubre Playtomic).
 
+## Instalación sin tocar código
+
+**En tu ordenador (doble clic):** instala Node.js LTS desde https://nodejs.org (una sola vez), descomprime el proyecto y haz doble clic en `iniciar.bat` (Windows) o `iniciar.command` (Mac). Instala lo necesario, carga los datos y abre la app en el navegador. En Mac, si bloquea el archivo: clic derecho > Abrir.
+
+**En internet (URL para el móvil):** sube el proyecto a tu cuenta de GitHub, entra en https://render.com, elige *New > Blueprint* y selecciona el repositorio. Render lee `render.yaml`, lo construye y te da una dirección pública. Los datos de ejemplo se restauran en cada arranque. Son datos ficticios y sin acceso protegido: cualquiera con el enlace puede verla.
+
 ## Arranque
 
 Requiere **Node ≥ 22.13** (usa el módulo SQLite integrado `node:sqlite`).
